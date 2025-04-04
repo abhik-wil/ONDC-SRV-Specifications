@@ -20,7 +20,7 @@ value:
     ttl: PT30S
   message:
     order:
-      update_target: fulfillments
+      update_target: ["message.order.fulfillments", "message.order.payments", "message.order.quote"]
       id: O1
       status: ACCEPTED
       provider:
@@ -33,6 +33,7 @@ value:
             - L1
           fulfillment_ids:
             - F1
+            - F2
           quantity:
             selected:
               count: 1
@@ -167,10 +168,47 @@ value:
                 name: ""
                 short_desc: "Specific Instructions - Optional"
                 long_desc: ""
+        - id: F2
+          type: Home-Service
+          tracking: false
+          stops:
+            - type: start
+              instructions:
+                name: Instuctions by provider
+                short_desc: Instuctions by provider
+                long_desc: Instuctions by provider
+                additional_desc:
+                  url: https://abc.com/instructions
+                  content_type: text/html
+            - type: end
+              location:
+                gps: 12.974002,77.613458
+                address: "My House #, My buildin"
+                city:
+                  name: Bengaluru
+                country:
+                  code: IND
+                area_code: "560001"
+                state:
+                  name: Karnataka
+              contact:
+                phone: "9886098860"
+                email: nobody@nomail.com
+              time:
+                label: confirmed
+                range:
+                  start: '2024-03-06T10:00:00.000Z'
+                  end: '2024-03-06T18:00:00.000Z'
+              person:
+                name: Shyam
+              instructions:
+                name: ""
+                short_desc: "Specific Instructions - Optional"
+                long_desc: ""
       quote:
         price:
           currency: INR
-          value: "1021.00"
+          value: "1121.00"
         breakup:
           - title: Cook - On Demand
             price:
@@ -180,7 +218,7 @@ value:
               id: I1
               quantity:
                 selected:
-                  count: 1
+                  count: 2
               price:
                 currency: INR
                 value: "00.00"
@@ -199,10 +237,10 @@ value:
               id: IC1
               quantity:
                 selected:
-                  count: 3
+                  count: 6
               price:
                 currency: INR
-                value: "199.00"
+                value: "399.00"
             tags:
               - descriptor:
                   code: title
@@ -335,7 +373,7 @@ value:
           - title: discount
             price:
               currency: INR
-              value: "0"
+              value: "200"
             item:
               id: I1
             tags:
@@ -348,7 +386,7 @@ value:
           - title: convenience_fee
             price:
               currency: INR
-              value: "0"
+              value: "100"
             item:
               id: I1
             tags:
@@ -420,6 +458,62 @@ value:
           collected_by: BPP
           params:
             amount: "522"
+            currency: INR
+            bank_account_number: xxxxxxxx
+            bank_code: xxxxxxxx
+            virtual_payment_address: xxx@xxxx
+          type: ON-FULFILLMENT
+          status: NOT-PAID
+          tags:
+            - descriptor:
+                code: Settlement_Counterparty
+              list:
+                - descriptor:
+                    code: Counterparty
+                  value: BPP
+                - descriptor:
+                    code: Mode
+                  value: UPI
+                - descriptor:
+                    code: Beneficiary_Name
+                  value: xxxxx
+                - descriptor:
+                    code: Bank_Account_No
+                  value: xxxxx
+                - descriptor:
+                    code: Ifsc_Code
+                  value: xxxxxxx
+                - descriptor:
+                    code: UPI_Address
+                  value: xxxxxxx
+            - descriptor:
+                code: Settlement_Details
+              list:
+              - descriptor:
+                  code: Window
+                value: P1D
+              - descriptor:
+                  code: Basis
+                value: Completed
+              - descriptor:
+                  code: Witholding_Amount
+                value: '0.00'
+              - descriptor:
+                  code: Phase
+                value: sale-amount
+            - descriptor:
+                code: Buyer_Finder_Fee
+              list:
+                - descriptor:
+                    code: Buyer_finder_fee_type
+                  value: percent
+                - descriptor:
+                    code: Buyer_finder_fee_amount
+                  value: "3"
+        - id: P3
+          collected_by: BPP
+          params:
+            amount: "100"
             currency: INR
             bank_account_number: xxxxxxxx
             bank_code: xxxxxxxx

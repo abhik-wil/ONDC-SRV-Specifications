@@ -1,5 +1,5 @@
 summary: Seller app sends a quotation of the home service for which consultation was taken e.g home painting
-description: Seller app sends a quotation of the home service for which consultation was taken e.g home painting
+description: Once service person arrives, the seller app sends an actual or updated quotation of the home service for which consultation was taken with the edits required (for eg, if the service person has to paint more sq ft, the quotation should be updated to include that)
 value:
   context:
     domain: ONDC:SRV11
@@ -20,6 +20,7 @@ value:
     ttl: PT5D
   message:
     order:
+      update_target: ["message.order.fulfillments", "message.order.payments"]
       id: C1
       status: PENDING
       provider:
@@ -242,6 +243,9 @@ value:
         - id: F2
           type: Home-Service
           tracking: false
+          state:
+            descriptor:
+              code: Pending
           stops:
             - type: start
               location:

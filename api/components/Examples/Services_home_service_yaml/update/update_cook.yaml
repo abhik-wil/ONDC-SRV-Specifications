@@ -20,7 +20,7 @@ value:
     ttl: PT30S
   message:
     order:
-      update_target: fulfillments
+      update_target: ["message.order.fulfillments"]
       id: O1
       status: ACCEPTED
       provider:
@@ -33,6 +33,7 @@ value:
             - L1
           fulfillment_ids:
             - F1
+            - F2
           quantity:
             selected:
               count: 1
@@ -167,6 +168,37 @@ value:
                 name: ""
                 short_desc: "Specific Instructions - Optional"
                 long_desc: ""
+        - id: F2
+          type: Home-Service
+          tracking: false
+          stops:
+            - type: start
+              instructions:
+                name: Instuctions by provider
+                short_desc: Instuctions by provider
+                long_desc: Instuctions by provider
+                additional_desc:
+                  url: https://abc.com/instructions
+                  content_type: text/html
+            - type: end
+              location:
+                gps: 12.974002,77.613458
+                address: "My House #, My buildin"
+                city:
+                  name: Bengaluru
+                country:
+                  code: IND
+                area_code: "560001"
+                state:
+                  name: Karnataka
+              contact:
+                phone: "9886098860"
+                email: nobody@nomail.com
+              time:
+                label: confirmed
+                range:
+                  start: '2024-03-06T10:00:00.000Z'
+                  end: '2024-03-06T18:00:00.000Z'
       quote:
         price:
           currency: INR

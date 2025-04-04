@@ -20,7 +20,7 @@ value:
     ttl: PT30S
   message:
     order:
-      update_target: fulfillments
+      update_target: ["fulfillments"]
       id: O1
       status: ACCEPTED
       provider:

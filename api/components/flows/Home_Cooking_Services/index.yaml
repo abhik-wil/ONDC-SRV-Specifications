@@ -112,7 +112,7 @@ steps:
       $ref: "../../Examples/Services_home_service_yaml/update/update_cook.yaml"
   - summary: Seller accepts and updates the order fulfillments.
     api: on_update
-    description: Seller accepts and update the fulfillments for the order.
+    description: Seller accepts and update the fulfillments and payments for the order.
     reference: if any
     example:
       $ref: "../../Examples/Services_home_service_yaml/on_update/on_update_cook.yaml"

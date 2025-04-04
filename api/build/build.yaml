@@ -9817,7 +9817,8 @@ x-flows:
               ttl: PT30S
             message:
               order:
-                update_target: fulfillments
+                update_target:
+                  - message.order.fulfillments
                 id: O1
                 status: ACCEPTED
                 provider:
@@ -9830,6 +9831,7 @@ x-flows:
                       - L1
                     fulfillment_ids:
                       - F1
+                      - F2
                     quantity:
                       selected:
                         count: 1
@@ -9964,6 +9966,37 @@ x-flows:
                           name: ''
                           short_desc: Specific Instructions - Optional
                           long_desc: ''
+                  - id: F2
+                    type: Home-Service
+                    tracking: false
+                    stops:
+                      - type: start
+                        instructions:
+                          name: Instuctions by provider
+                          short_desc: Instuctions by provider
+                          long_desc: Instuctions by provider
+                          additional_desc:
+                            url: https://abc.com/instructions
+                            content_type: text/html
+                      - type: end
+                        location:
+                          gps: 12.974002,77.613458
+                          address: 'My House #, My buildin'
+                          city:
+                            name: Bengaluru
+                          country:
+                            code: IND
+                          area_code: '560001'
+                          state:
+                            name: Karnataka
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        time:
+                          label: confirmed
+                          range:
+                            start: '2024-03-06T10:00:00.000Z'
+                            end: '2024-03-06T18:00:00.000Z'
                 quote:
                   price:
                     currency: INR
@@ -10271,7 +10304,7 @@ x-flows:
                             value: '3'
       - summary: Seller accepts and updates the order fulfillments.
         api: on_update
-        description: Seller accepts and update the fulfillments for the order.
+        description: Seller accepts and update the fulfillments and payments for the order.
         reference: if any
         example: &ref_36
           summary: Seller app sends the updated fulfillments
@@ -10296,7 +10329,10 @@ x-flows:
               ttl: PT30S
             message:
               order:
-                update_target: fulfillments
+                update_target:
+                  - message.order.fulfillments
+                  - message.order.payments
+                  - message.order.quote
                 id: O1
                 status: ACCEPTED
                 provider:
@@ -10309,6 +10345,7 @@ x-flows:
                       - L1
                     fulfillment_ids:
                       - F1
+                      - F2
                     quantity:
                       selected:
                         count: 1
@@ -10443,10 +10480,47 @@ x-flows:
                           name: ''
                           short_desc: Specific Instructions - Optional
                           long_desc: ''
+                  - id: F2
+                    type: Home-Service
+                    tracking: false
+                    stops:
+                      - type: start
+                        instructions:
+                          name: Instuctions by provider
+                          short_desc: Instuctions by provider
+                          long_desc: Instuctions by provider
+                          additional_desc:
+                            url: https://abc.com/instructions
+                            content_type: text/html
+                      - type: end
+                        location:
+                          gps: 12.974002,77.613458
+                          address: 'My House #, My buildin'
+                          city:
+                            name: Bengaluru
+                          country:
+                            code: IND
+                          area_code: '560001'
+                          state:
+                            name: Karnataka
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        time:
+                          label: confirmed
+                          range:
+                            start: '2024-03-06T10:00:00.000Z'
+                            end: '2024-03-06T18:00:00.000Z'
+                        person:
+                          name: Shyam
+                        instructions:
+                          name: ''
+                          short_desc: Specific Instructions - Optional
+                          long_desc: ''
                 quote:
                   price:
                     currency: INR
-                    value: '1021.00'
+                    value: '1121.00'
                   breakup:
                     - title: Cook - On Demand
                       price:
@@ -10456,7 +10530,7 @@ x-flows:
                         id: I1
                         quantity:
                           selected:
-                            count: 1
+                            count: 2
                         price:
                           currency: INR
                           value: '00.00'
@@ -10475,10 +10549,10 @@ x-flows:
                         id: IC1
                         quantity:
                           selected:
-                            count: 3
+                            count: 6
                         price:
                           currency: INR
-                          value: '199.00'
+                          value: '399.00'
                       tags:
                         - descriptor:
                             code: title
@@ -10611,7 +10685,7 @@ x-flows:
                     - title: discount
                       price:
                         currency: INR
-                        value: '0'
+                        value: '200'
                       item:
                         id: I1
                       tags:
@@ -10624,7 +10698,7 @@ x-flows:
                     - title: convenience_fee
                       price:
                         currency: INR
-                        value: '0'
+                        value: '100'
                       item:
                         id: I1
                       tags:
@@ -10696,6 +10770,62 @@ x-flows:
                     collected_by: BPP
                     params:
                       amount: '522'
+                      currency: INR
+                      bank_account_number: xxxxxxxx
+                      bank_code: xxxxxxxx
+                      virtual_payment_address: xxx@xxxx
+                    type: ON-FULFILLMENT
+                    status: NOT-PAID
+                    tags:
+                      - descriptor:
+                          code: Settlement_Counterparty
+                        list:
+                          - descriptor:
+                              code: Counterparty
+                            value: BPP
+                          - descriptor:
+                              code: Mode
+                            value: UPI
+                          - descriptor:
+                              code: Beneficiary_Name
+                            value: xxxxx
+                          - descriptor:
+                              code: Bank_Account_No
+                            value: xxxxx
+                          - descriptor:
+                              code: Ifsc_Code
+                            value: xxxxxxx
+                          - descriptor:
+                              code: UPI_Address
+                            value: xxxxxxx
+                      - descriptor:
+                          code: Settlement_Details
+                        list:
+                          - descriptor:
+                              code: Window
+                            value: P1D
+                          - descriptor:
+                              code: Basis
+                            value: Completed
+                          - descriptor:
+                              code: Witholding_Amount
+                            value: '0.00'
+                          - descriptor:
+                              code: Phase
+                            value: sale-amount
+                      - descriptor:
+                          code: Buyer_Finder_Fee
+                        list:
+                          - descriptor:
+                              code: Buyer_finder_fee_type
+                            value: percent
+                          - descriptor:
+                              code: Buyer_finder_fee_amount
+                            value: '3'
+                  - id: P3
+                    collected_by: BPP
+                    params:
+                      amount: '100'
                       currency: INR
                       bank_account_number: xxxxxxxx
                       bank_code: xxxxxxxx
@@ -12184,8 +12314,10 @@ x-flows:
             Seller app sends a quotation of the home service for which
             consultation was taken e.g home painting
           description: >-
-            Seller app sends a quotation of the home service for which
-            consultation was taken e.g home painting
+            Once service person arrives, the seller app sends an actual or
+            updated quotation of the home service for which consultation was
+            taken with the edits required (for eg, if the service person has to
+            paint more sq ft, the quotation should be updated to include that)
           value:
             context:
               domain: ONDC:SRV11
@@ -12206,6 +12338,9 @@ x-flows:
               ttl: PT5D
             message:
               order:
+                update_target:
+                  - message.order.fulfillments
+                  - message.order.payments
                 id: C1
                 status: PENDING
                 provider:
@@ -12427,6 +12562,9 @@ x-flows:
                   - id: F2
                     type: Home-Service
                     tracking: false
+                    state:
+                      descriptor:
+                        code: Pending
                     stops:
                       - type: start
                         location:
@@ -12823,7 +12961,646 @@ x-flows:
               timestamp: '2023-11-17T10:20:00.000Z'
               ttl: PT30S
             message:
-              update_target: payments
+              update_target:
+                - message.order.payments
+              order:
+                id: O1
+                status: ACCEPTED
+                provider:
+                  id: P1
+                items:
+                  - id: PI1
+                    parent_item_id: ''
+                    fulfillment_ids:
+                      - F1
+                    quantity:
+                      selected:
+                        count: 1
+                  - id: I1
+                    parent_item_id: PI1
+                    quantity:
+                      selected:
+                        count: 6
+                        measure:
+                          unit: rooms
+                    fulfillment_ids:
+                      - F2
+                    payment_ids:
+                      - P2
+                      - P3
+                payments:
+                  - id: P1
+                    collected_by: BAP
+                    params:
+                      amount: '99'
+                      currency: INR
+                      transaction_id: '3937'
+                      bank_account_number: xxxxxxxx
+                      virtual_payment_address: xxx@xxxx
+                    status: PAID
+                    type: PRE-FULFILLMENT
+                    tags:
+                      - descriptor:
+                          code: Settlement_Counterparty
+                        list:
+                          - descriptor:
+                              code: Counterparty
+                            value: BPP
+                          - descriptor:
+                              code: Mode
+                            value: UPI
+                          - descriptor:
+                              code: Beneficiary_Name
+                            value: xxxxx
+                          - descriptor:
+                              code: Bank_Account_No
+                            value: xxxxx
+                          - descriptor:
+                              code: Ifsc_Code
+                            value: xxxxxxx
+                          - descriptor:
+                              code: UPI_Address
+                            value: xxxxxxx
+                      - descriptor:
+                          code: Settlement_Details
+                        list:
+                          - descriptor:
+                              code: Window
+                            value: P1D
+                          - descriptor:
+                              code: Basis
+                            value: Completed
+                          - descriptor:
+                              code: Witholding_Amount
+                            value: '0.00'
+                          - descriptor:
+                              code: Phase
+                            value: sale-amount
+                      - descriptor:
+                          code: Buyer_Finder_Fee
+                        list:
+                          - descriptor:
+                              code: Buyer_finder_fee_type
+                            value: percent
+                          - descriptor:
+                              code: Buyer_finder_fee_amount
+                            value: '3'
+                  - id: P2
+                    collected_by: BPP
+                    params:
+                      amount: '5231'
+                      currency: INR
+                      transaction_id: '3937'
+                      bank_account_number: xxxxxxxx
+                      bank_code: xxxxxxx
+                      virtual_payment_address: xxx@xxxx
+                    status: PAID
+                    type: PRE-FULFILLMENT
+                    tags:
+                      - descriptor:
+                          code: Settlement_Details
+                        list:
+                          - descriptor:
+                              code: Counterparty
+                            value: BAP
+                          - descriptor:
+                              code: Mode
+                            value: UPI
+                          - descriptor:
+                              code: Beneficiary_Name
+                            value: xxxxx
+                          - descriptor:
+                              code: Bank_Account_No
+                            value: xxxxx
+                          - descriptor:
+                              code: Ifsc_Code
+                            value: xxxxxxx
+                          - descriptor:
+                              code: UPI_Address
+                            value: xxxxxxx
+                      - descriptor:
+                          code: Buyer_Finder_Fee
+                        list:
+                          - descriptor:
+                              code: Buyer_finder_fee_type
+                            value: percent
+                          - descriptor:
+                              code: Buyer_finder_fee_amount
+                            value: '3'
+                  - id: P3
+                    collected_by: BPP
+                    params:
+                      amount: '4188'
+                      currency: INR
+                      bank_account_number: xxxxxxxx
+                      bank_code: xxxxxxx
+                      virtual_payment_address: xxx@xxxx
+                    status: NOT-PAID
+                    type: ON-FULFILLMENT
+                    tags:
+                      - descriptor:
+                          code: Settlement_Details
+                        list:
+                          - descriptor:
+                              code: Counterparty
+                            value: BAP
+                          - descriptor:
+                              code: Mode
+                            value: UPI
+                          - descriptor:
+                              code: Beneficiary_Name
+                            value: xxxxx
+                          - descriptor:
+                              code: Bank_Account_No
+                            value: xxxxx
+                          - descriptor:
+                              code: Ifsc_Code
+                            value: xxxxxxx
+                          - descriptor:
+                              code: UPI_Address
+                            value: xxxxxxx
+                      - descriptor:
+                          code: Buyer_Finder_Fee
+                        list:
+                          - descriptor:
+                              code: Buyer_finder_fee_type
+                            value: percent
+                          - descriptor:
+                              code: Buyer_finder_fee_amount
+                            value: '3'
+                fulfillments:
+                  - id: F1
+                    state:
+                      descriptor:
+                        code: Completed
+                    type: Home-Service
+                    tracking: false
+                    stops:
+                      - type: start
+                        location:
+                          id: L1
+                          descriptor:
+                            name: ABC Store
+                          gps: 12.956399,77.636803
+                        time:
+                          range:
+                            start: '2023-11-16T09:30:00.000Z'
+                            end: '2023-11-16T10:30:00.000Z'
+                          timestamp: '2023-11-16T09:00:00.000Z'
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        person:
+                          name: Kishan
+                      - type: end
+                        location:
+                          gps: 12.974002,77.613458
+                          address: 'My House #, My buildin'
+                          city:
+                            name: Bengaluru
+                          country:
+                            code: IND
+                          area_code: '560001'
+                          state:
+                            name: Karnataka
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        time:
+                          label: confirmed
+                          range:
+                            start: '2023-11-16T09:30:00.000Z'
+                            end: '2023-11-16T10:30:00.000Z'
+                          timestamp: '2023-11-16T09:00:00.000Z'
+                        person:
+                          name: Ramu
+                        instructions:
+                          name: Special Instructions
+                          short_desc: Customer Special Instructions
+                        authorization:
+                          type: OTP
+                          token: '1234'
+                          valid_from: '2023-11-16T09:30:00.000Z'
+                          valid_to: '2023-11-16T09:35:00.000Z'
+                          status: valid
+                    rateable: true
+                  - id: F2
+                    state:
+                      descriptor:
+                        code: Pending
+                    type: Home-Service
+                    tracking: false
+                    stops:
+                      - type: start
+                        location:
+                          id: L1
+                          descriptor:
+                            name: ABC Store
+                          gps: 12.956399,77.636803
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        person:
+                          name: Kishan
+                      - type: end
+                        location:
+                          gps: 12.974002,77.613458
+                          address: 'My House #, My buildin'
+                          city:
+                            name: Bengaluru
+                          country:
+                            code: IND
+                          area_code: '560001'
+                          state:
+                            name: Karnataka
+                        time:
+                          range:
+                            start: '2023-11-18T09:30:00.000Z'
+                            end: '2023-11-21T16:30:00.000Z'
+                        contact:
+                          phone: '9886098860'
+                          email: nobody@nomail.com
+                        person:
+                          name: Ramu
+                        instructions:
+                          name: Special Instructions
+                          short_desc: Customer Special Instructions
+                    rateable: true
+                quote:
+                  price:
+                    currency: INR
+                    value: '9419'
+                  breakup:
+                    - title: Balcony
+                      price:
+                        currency: INR
+                        value: '922'
+                      item:
+                        id: B1
+                        descriptor:
+                          code: xxxx
+                          short_desc: Balcony
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 1
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '100.00'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '922'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: Master Bedroom
+                      price:
+                        currency: INR
+                        value: '2784'
+                      item:
+                        id: MB1
+                        descriptor:
+                          code: xxxx
+                          short_desc: Master Bedroom
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 4
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '301.75'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '2784'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: Kitchen
+                      price:
+                        currency: INR
+                        value: '286'
+                      item:
+                        id: K1
+                        descriptor:
+                          code: xxxx
+                          short_desc: Kitchen
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 2
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '31.00'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '286'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: Living Room
+                      price:
+                        currency: INR
+                        value: '4392'
+                      item:
+                        id: L1
+                        descriptor:
+                          code: xxxx
+                          short_desc: Living Room
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 4
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '476.00'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '4392'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: Bedroom 3
+                      price:
+                        currency: INR
+                        value: '2466'
+                      item:
+                        id: B31
+                        descriptor:
+                          code: xxxx
+                          short_desc: Bedroom 3
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 4
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '267.25'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '2466'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: Bedroom 2
+                      price:
+                        currency: INR
+                        value: '2244'
+                      item:
+                        id: B21
+                        descriptor:
+                          code: xxxx
+                          short_desc: Bedroom 2
+                          long_desc: Tractor Uno Double Coat Without Primer
+                        quantity:
+                          selected:
+                            count: 4
+                            measure:
+                              type: constant
+                              unit: wall
+                          unitized:
+                            count: '243.25'
+                            measure:
+                              type: variable
+                              unit: square-foot
+                        price:
+                          currency: INR
+                          value: '2244'
+                        tags:
+                          - descriptor:
+                              code: attributes
+                            list:
+                              - descriptor:
+                                  code: colour
+                                value: '#ECE5D8'
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: item
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: MB1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: B1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: K1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: L1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: B31
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: tax
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: B21
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: tax
+                    - title: discount
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: L1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: discount
+                    - title: convenience_fee
+                      price:
+                        currency: INR
+                        value: '0'
+                      item:
+                        id: L1
+                      tags:
+                        - descriptor:
+                            code: title
+                          list:
+                            - descriptor:
+                                code: type
+                              value: misc
+                  ttl: P5D
+      - summary: >-
+          Seller app sends a confirmation of payment of the home service for
+          which consultation was taken e.g home painting
+        api: on_update
+        description: >-
+          Seller app sends a quotation of the home service for which
+          consultation was taken e.g home painting
+        reference: if any
+        example:
+          summary: >-
+            Seller app sends a confirmation pament acceptance of updation of the
+            home service for which consultation was taken e.g home painting
+          description: >-
+            This is a seller-side flow. Once service person arrives, the seller
+            app sends an actual or updated quotation of the home service for
+            which consultation was taken with the edits required (for eg, if the
+            service person has to paint more sq ft, the quotation should be
+            updated to include that)
+          value:
+            context:
+              domain: ONDC:SRV11
+              location:
+                city:
+                  code: std:080
+                country:
+                  code: IND
+              action: on_update
+              version: 2.0.0
+              bap_id: buyerapp.com
+              bap_uri: https://buyerapp.com/services
+              bpp_id: sellerapp.com
+              bpp_uri: https://sellerapp.com/services
+              transaction_id: 65fe13c2-d306-4ef1-8c25-fa126c134b67
+              message_id: ea89883a-57ff-44de-87fa-66b07c8d25e1
+              timestamp: '2023-11-16T10:20:00.000Z'
+              ttl: PT30S
+            message:
               order:
                 id: O1
                 status: ACCEPTED
@@ -14559,7 +15336,8 @@ x-flows:
               timestamp: '2023-11-17T10:20:00.000Z'
               ttl: PT30S
             message:
-              update_target: fulfillments
+              update_target:
+                - fulfillments
               order:
                 id: O1
                 status: ACCEPTED
@@ -19996,7 +20774,8 @@ x-examples:
                 timestamp: '2023-11-17T10:20:00.000Z'
                 ttl: PT30S
               message:
-                update_target: payments
+                update_target:
+                  - message.order.payments
                 order:
                   id: O1
                   status: ACCEPTED
@@ -26743,8 +27522,11 @@ x-examples:
               Seller app sends a quotation of the home service for which
               consultation was taken e.g home painting
             description: >-
-              Seller app sends a quotation of the home service for which
-              consultation was taken e.g home painting
+              Once service person arrives, the seller app sends an actual or
+              updated quotation of the home service for which consultation was
+              taken with the edits required (for eg, if the service person has
+              to paint more sq ft, the quotation should be updated to include
+              that)
             value:
               context:
                 domain: ONDC:SRV11
@@ -26765,6 +27547,9 @@ x-examples:
                 ttl: PT5D
               message:
                 order:
+                  update_target:
+                    - message.order.fulfillments
+                    - message.order.payments
                   id: C1
                   status: PENDING
                   provider:
@@ -26986,6 +27771,9 @@ x-examples:
                     - id: F2
                       type: Home-Service
                       tracking: false
+                      state:
+                        descriptor:
+                          code: Pending
                       stops:
                         - type: start
                           location:

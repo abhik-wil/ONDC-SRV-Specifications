@@ -136,3 +136,9 @@ steps:
     reference: if any
     example:
       $ref: "../../Examples/Services_home_service_yaml/update/update_requote.yaml"
+  - summary: Seller app sends a confirmation of payment of the home service for which consultation was taken e.g home painting
+    api: on_update
+    description: Seller app sends a quotation of the home service for which consultation was taken e.g home painting
+    reference: if any
+    example:
+      $ref: "../../Examples/Services_home_service_yaml/on_update/on_update_requote_payment_confirmation.yaml"
